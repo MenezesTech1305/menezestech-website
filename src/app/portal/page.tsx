@@ -236,27 +236,15 @@ export default function PortalPage() {
                   </Button>
                 </form>
 
-                {/* Credenciais de acesso */}
+                {/* Informação de segurança */}
                 <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                  <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                  <h3 className="text-sm font-medium text-gray-900 mb-2 flex items-center">
                     <Shield className="h-4 w-4 mr-2 text-blue-600" />
-                    Credencial de Acesso Principal:
+                    Acesso Seguro
                   </h3>
-                  <div className="space-y-2">
-                    <div className="bg-white p-3 rounded border">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Superadministrador:</span>
-                        <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Acesso Total</span>
-                      </div>
-                      <div className="font-mono text-xs bg-gray-100 p-2 rounded">
-                        <div>📧 admin@menezestech.com</div>
-                        <div>🔑 Mnz1305ii@#!</div>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-2">
-                      Use essas credenciais para acessar o sistema com privilégios completos de administração.
-                    </p>
-                  </div>
+                  <p className="text-xs text-gray-600">
+                    Use suas credenciais fornecidas pela equipe MenezesTech para acessar o portal com segurança.
+                  </p>
                 </div>
 
                 <div className="mt-6 text-center">
