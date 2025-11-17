@@ -1,8 +1,12 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { Database } from '@/types/supabase'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://lrjkyupznspzvxrhxtsh.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxyamt5dXB6bnNwenZ4cmh4dHNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NDQ2MzUsImV4cCI6MjA2NjUyMDYzNX0.EkuQ9LD7JqiYew852c68QuE1GkucLDHPIeAUOfYjT70'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Variáveis de ambiente do Supabase não configuradas. Verifique .env.local')
+}
 
 // Cliente Supabase tipado
 export const supabase: SupabaseClient<Database> = createClient<Database>(
