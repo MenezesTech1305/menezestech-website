@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "13.0.5"
+  }
   public: {
     Tables: {
       activity_logs: {
@@ -14,9 +19,9 @@ export type Database = {
           action: string
           created_at: string | null
           entity_id: string | null
-          entity_type: string
+          entity_type: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: string | null
           new_values: Json | null
           old_values: Json | null
           user_agent: string | null
@@ -26,9 +31,9 @@ export type Database = {
           action: string
           created_at?: string | null
           entity_id?: string | null
-          entity_type: string
+          entity_type?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: string | null
           new_values?: Json | null
           old_values?: Json | null
           user_agent?: string | null
@@ -38,9 +43,9 @@ export type Database = {
           action?: string
           created_at?: string | null
           entity_id?: string | null
-          entity_type?: string
+          entity_type?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: string | null
           new_values?: Json | null
           old_values?: Json | null
           user_agent?: string | null
@@ -56,199 +61,6 @@ export type Database = {
           },
         ]
       }
-      attachments: {
-        Row: {
-          created_at: string | null
-          entity_id: string
-          entity_type: string
-          file_size: number
-          filename: string
-          id: string
-          mime_type: string
-          original_filename: string
-          storage_path: string
-          uploaded_by: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          entity_id: string
-          entity_type: string
-          file_size: number
-          filename: string
-          id?: string
-          mime_type: string
-          original_filename: string
-          storage_path: string
-          uploaded_by?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          entity_id?: string
-          entity_type?: string
-          file_size?: number
-          filename?: string
-          id?: string
-          mime_type?: string
-          original_filename?: string
-          storage_path?: string
-          uploaded_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "attachments_uploaded_by_fkey"
-            columns: ["uploaded_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      contas_pagar: {
-        Row: {
-          categoria: Database["public"]["Enums"]["categoria_despesa"]
-          created_at: string | null
-          data_emissao: string
-          data_pagamento: string | null
-          data_vencimento: string
-          descricao: string
-          forma_pagamento: Database["public"]["Enums"]["forma_pagamento"] | null
-          fornecedor: string
-          id: string
-          numero: string
-          observacoes: string | null
-          prioridade: Database["public"]["Enums"]["prioridade_pagamento"]
-          proximo_vencimento: string | null
-          recorrente: boolean | null
-          status: Database["public"]["Enums"]["status_conta"]
-          updated_at: string | null
-          valor: number
-        }
-        Insert: {
-          categoria: Database["public"]["Enums"]["categoria_despesa"]
-          created_at?: string | null
-          data_emissao?: string
-          data_pagamento?: string | null
-          data_vencimento: string
-          descricao: string
-          forma_pagamento?:
-            | Database["public"]["Enums"]["forma_pagamento"]
-            | null
-          fornecedor: string
-          id?: string
-          numero: string
-          observacoes?: string | null
-          prioridade?: Database["public"]["Enums"]["prioridade_pagamento"]
-          proximo_vencimento?: string | null
-          recorrente?: boolean | null
-          status?: Database["public"]["Enums"]["status_conta"]
-          updated_at?: string | null
-          valor: number
-        }
-        Update: {
-          categoria?: Database["public"]["Enums"]["categoria_despesa"]
-          created_at?: string | null
-          data_emissao?: string
-          data_pagamento?: string | null
-          data_vencimento?: string
-          descricao?: string
-          forma_pagamento?:
-            | Database["public"]["Enums"]["forma_pagamento"]
-            | null
-          fornecedor?: string
-          id?: string
-          numero?: string
-          observacoes?: string | null
-          prioridade?: Database["public"]["Enums"]["prioridade_pagamento"]
-          proximo_vencimento?: string | null
-          recorrente?: boolean | null
-          status?: Database["public"]["Enums"]["status_conta"]
-          updated_at?: string | null
-          valor?: number
-        }
-        Relationships: []
-      }
-      contas_receber: {
-        Row: {
-          categoria: Database["public"]["Enums"]["categoria_receita"]
-          cliente_id: string
-          created_at: string | null
-          data_emissao: string
-          data_pagamento: string | null
-          data_vencimento: string
-          descricao: string
-          forma_pagamento: Database["public"]["Enums"]["forma_pagamento"] | null
-          id: string
-          numero: string
-          observacoes: string | null
-          os_id: string | null
-          status: Database["public"]["Enums"]["status_conta"]
-          tentativas_cobranca: number | null
-          ultima_cobranca: string | null
-          updated_at: string | null
-          valor: number
-          valor_pago: number | null
-        }
-        Insert: {
-          categoria: Database["public"]["Enums"]["categoria_receita"]
-          cliente_id: string
-          created_at?: string | null
-          data_emissao?: string
-          data_pagamento?: string | null
-          data_vencimento: string
-          descricao: string
-          forma_pagamento?:
-            | Database["public"]["Enums"]["forma_pagamento"]
-            | null
-          id?: string
-          numero: string
-          observacoes?: string | null
-          os_id?: string | null
-          status?: Database["public"]["Enums"]["status_conta"]
-          tentativas_cobranca?: number | null
-          ultima_cobranca?: string | null
-          updated_at?: string | null
-          valor: number
-          valor_pago?: number | null
-        }
-        Update: {
-          categoria?: Database["public"]["Enums"]["categoria_receita"]
-          cliente_id?: string
-          created_at?: string | null
-          data_emissao?: string
-          data_pagamento?: string | null
-          data_vencimento?: string
-          descricao?: string
-          forma_pagamento?:
-            | Database["public"]["Enums"]["forma_pagamento"]
-            | null
-          id?: string
-          numero?: string
-          observacoes?: string | null
-          os_id?: string | null
-          status?: Database["public"]["Enums"]["status_conta"]
-          tentativas_cobranca?: number | null
-          ultima_cobranca?: string | null
-          updated_at?: string | null
-          valor?: number
-          valor_pago?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "contas_receber_cliente_id_fkey"
-            columns: ["cliente_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contas_receber_os_id_fkey"
-            columns: ["os_id"]
-            isOneToOne: false
-            referencedRelation: "ordens_servico"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       notifications: {
         Row: {
           action_url: string | null
@@ -256,11 +68,10 @@ export type Database = {
           entity_id: string | null
           entity_type: string | null
           id: string
+          is_read: boolean | null
           message: string
-          read_at: string | null
-          status: Database["public"]["Enums"]["notification_status"]
           title: string
-          type: Database["public"]["Enums"]["notification_type"]
+          type: string | null
           user_id: string
         }
         Insert: {
@@ -269,11 +80,10 @@ export type Database = {
           entity_id?: string | null
           entity_type?: string | null
           id?: string
+          is_read?: boolean | null
           message: string
-          read_at?: string | null
-          status?: Database["public"]["Enums"]["notification_status"]
           title: string
-          type?: Database["public"]["Enums"]["notification_type"]
+          type?: string | null
           user_id: string
         }
         Update: {
@@ -282,11 +92,10 @@ export type Database = {
           entity_id?: string | null
           entity_type?: string | null
           id?: string
+          is_read?: boolean | null
           message?: string
-          read_at?: string | null
-          status?: Database["public"]["Enums"]["notification_status"]
           title?: string
-          type?: Database["public"]["Enums"]["notification_type"]
+          type?: string | null
           user_id?: string
         }
         Relationships: [
@@ -301,60 +110,54 @@ export type Database = {
       }
       ordens_servico: {
         Row: {
-          categoria: Database["public"]["Enums"]["categoria_os"]
-          cliente_id: string
+          cliente_id: string | null
           created_at: string | null
           data_abertura: string | null
           data_conclusao: string | null
           data_inicio: string | null
-          data_vencimento: string | null
-          descricao: string
+          descricao: string | null
           id: string
           numero: string
-          observacoes: string | null
-          prioridade: Database["public"]["Enums"]["prioridade_os"]
+          prazo_estimado: string | null
+          prioridade: string | null
           responsavel_id: string | null
-          status: Database["public"]["Enums"]["status_os"]
+          status: string
           titulo: string
           updated_at: string | null
           valor_final: number | null
           valor_orcado: number | null
         }
         Insert: {
-          categoria: Database["public"]["Enums"]["categoria_os"]
-          cliente_id: string
+          cliente_id?: string | null
           created_at?: string | null
           data_abertura?: string | null
           data_conclusao?: string | null
           data_inicio?: string | null
-          data_vencimento?: string | null
-          descricao: string
+          descricao?: string | null
           id?: string
           numero: string
-          observacoes?: string | null
-          prioridade?: Database["public"]["Enums"]["prioridade_os"]
+          prazo_estimado?: string | null
+          prioridade?: string | null
           responsavel_id?: string | null
-          status?: Database["public"]["Enums"]["status_os"]
+          status?: string
           titulo: string
           updated_at?: string | null
           valor_final?: number | null
           valor_orcado?: number | null
         }
         Update: {
-          categoria?: Database["public"]["Enums"]["categoria_os"]
-          cliente_id?: string
+          cliente_id?: string | null
           created_at?: string | null
           data_abertura?: string | null
           data_conclusao?: string | null
           data_inicio?: string | null
-          data_vencimento?: string | null
-          descricao?: string
+          descricao?: string | null
           id?: string
           numero?: string
-          observacoes?: string | null
-          prioridade?: Database["public"]["Enums"]["prioridade_os"]
+          prazo_estimado?: string | null
+          prioridade?: string | null
           responsavel_id?: string | null
-          status?: Database["public"]["Enums"]["status_os"]
+          status?: string
           titulo?: string
           updated_at?: string | null
           valor_final?: number | null
@@ -377,38 +180,70 @@ export type Database = {
           },
         ]
       }
-      system_settings: {
+      os_approvals: {
         Row: {
+          aprovador_id: string | null
           created_at: string | null
-          created_by: string | null
-          description: string | null
+          data_resposta: string | null
+          data_solicitacao: string | null
           id: string
-          key: string
+          motivo_rejeicao: string | null
+          observacoes: string | null
+          os_id: string
+          solicitado_por: string
+          status: string
+          tipo_aprovacao: string
           updated_at: string | null
-          value: Json
+          valor_aprovacao: number | null
         }
         Insert: {
+          aprovador_id?: string | null
           created_at?: string | null
-          created_by?: string | null
-          description?: string | null
+          data_resposta?: string | null
+          data_solicitacao?: string | null
           id?: string
-          key: string
+          motivo_rejeicao?: string | null
+          observacoes?: string | null
+          os_id: string
+          solicitado_por: string
+          status?: string
+          tipo_aprovacao: string
           updated_at?: string | null
-          value: Json
+          valor_aprovacao?: number | null
         }
         Update: {
+          aprovador_id?: string | null
           created_at?: string | null
-          created_by?: string | null
-          description?: string | null
+          data_resposta?: string | null
+          data_solicitacao?: string | null
           id?: string
-          key?: string
+          motivo_rejeicao?: string | null
+          observacoes?: string | null
+          os_id?: string
+          solicitado_por?: string
+          status?: string
+          tipo_aprovacao?: string
           updated_at?: string | null
-          value?: Json
+          valor_aprovacao?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "system_settings_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: "os_approvals_aprovador_id_fkey"
+            columns: ["aprovador_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "os_approvals_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "os_approvals_solicitado_por_fkey"
+            columns: ["solicitado_por"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -417,51 +252,30 @@ export type Database = {
       }
       users: {
         Row: {
-          avatar: string | null
-          company: string | null
           created_at: string | null
-          document: string | null
           email: string
-          email_verified: boolean | null
           id: string
           is_active: boolean | null
-          last_login: string | null
           name: string
-          password_hash: string
-          phone: string | null
-          role: Database["public"]["Enums"]["user_role"]
+          role: string
           updated_at: string | null
         }
         Insert: {
-          avatar?: string | null
-          company?: string | null
           created_at?: string | null
-          document?: string | null
           email: string
-          email_verified?: boolean | null
           id?: string
           is_active?: boolean | null
-          last_login?: string | null
           name: string
-          password_hash: string
-          phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
+          role: string
           updated_at?: string | null
         }
         Update: {
-          avatar?: string | null
-          company?: string | null
           created_at?: string | null
-          document?: string | null
           email?: string
-          email_verified?: boolean | null
           id?: string
           is_active?: boolean | null
-          last_login?: string | null
           name?: string
-          password_hash?: string
-          phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
+          role?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -471,56 +285,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_financial_dashboard: {
-        Args: Record<PropertyKey, never>
+      get_pending_approvals: {
+        Args: Record<string, never>
+        Returns: {
+          data_solicitacao: string
+          id: string
+          observacoes: string
+          os_id: string
+          os_numero: string
+          os_titulo: string
+          solicitado_por_nome: string
+          tipo_aprovacao: string
+          valor_aprovacao: number
+        }[]
+      }
+      responder_aprovacao_os: {
+        Args: {
+          p_approval_id: string
+          p_motivo_rejeicao?: string
+          p_status: string
+        }
         Returns: Json
       }
-      get_os_stats: {
-        Args: Record<PropertyKey, never>
+      solicitar_aprovacao_os: {
+        Args: {
+          p_observacoes?: string
+          p_os_id: string
+          p_tipo_aprovacao: string
+          p_valor_aprovacao?: number
+        }
         Returns: Json
       }
     }
     Enums: {
-      categoria_despesa:
-        | "licencas"
-        | "equipamentos"
-        | "aluguel"
-        | "salarios"
-        | "marketing"
-        | "contabilidade"
-        | "outros"
-      categoria_os:
-        | "lgpd"
-        | "infraestrutura"
-        | "backup"
-        | "seguranca"
-        | "consultoria"
-        | "manutencao"
-      categoria_receita:
-        | "lgpd"
-        | "infraestrutura"
-        | "backup"
-        | "seguranca"
-        | "consultoria"
-        | "manutencao"
-      forma_pagamento:
-        | "pix"
-        | "boleto"
-        | "cartao"
-        | "dinheiro"
-        | "transferencia"
-      notification_status: "unread" | "read" | "archived"
-      notification_type: "info" | "warning" | "error" | "success"
-      prioridade_os: "baixa" | "media" | "alta" | "critica"
-      prioridade_pagamento: "baixa" | "media" | "alta" | "critica"
-      status_conta: "pendente" | "pago" | "vencido" | "parcial" | "cancelado"
-      status_os:
-        | "pendente"
-        | "em_andamento"
-        | "aguardando_cliente"
-        | "concluida"
-        | "cancelada"
-      user_role: "superadmin" | "admin" | "funcionario" | "cliente"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -528,21 +326,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -560,14 +362,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -583,14 +387,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -606,41 +412,39 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
-// Tipos específicos para facilitar o uso
-export type UserRole = Database["public"]["Enums"]["user_role"]
-export type StatusOS = Database["public"]["Enums"]["status_os"]
-export type PrioridadeOS = Database["public"]["Enums"]["prioridade_os"]
-export type CategoriaOS = Database["public"]["Enums"]["categoria_os"]
-export type StatusConta = Database["public"]["Enums"]["status_conta"]
-export type FormaPagamento = Database["public"]["Enums"]["forma_pagamento"]
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
 
-export type User = Tables<"users">
-export type OrdemServico = Tables<"ordens_servico">
-export type ContaReceber = Tables<"contas_receber">
-export type ContaPagar = Tables<"contas_pagar">
-export type Notification = Tables<"notifications">
-export type ActivityLog = Tables<"activity_logs">
-export type SystemSetting = Tables<"system_settings">
-export type Attachment = Tables<"attachments">
-
-export type UserInsert = TablesInsert<"users">
-export type OrdemServicoInsert = TablesInsert<"ordens_servico">
-export type ContaReceberInsert = TablesInsert<"contas_receber">
-export type ContaPagarInsert = TablesInsert<"contas_pagar">
-
-export type UserUpdate = TablesUpdate<"users">
-export type OrdemServicoUpdate = TablesUpdate<"ordens_servico">
-export type ContaReceberUpdate = TablesUpdate<"contas_receber">
-export type ContaPagarUpdate = TablesUpdate<"contas_pagar"> 
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

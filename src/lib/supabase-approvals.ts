@@ -30,8 +30,8 @@ export const solicitarAprovacao = async (params: SolicitarAprovacaoParams) => {
     const { data, error } = await supabase.rpc('solicitar_aprovacao_os', {
       p_os_id: params.os_id,
       p_tipo_aprovacao: params.tipo_aprovacao,
-      p_valor_aprovacao: params.valor_aprovacao || null,
-      p_observacoes: params.observacoes || null
+      p_valor_aprovacao: params.valor_aprovacao,
+      p_observacoes: params.observacoes
     })
 
     if (error) throw error
@@ -51,7 +51,7 @@ export const responderAprovacao = async (params: ResponderAprovacaoParams) => {
     const { data, error } = await supabase.rpc('responder_aprovacao_os', {
       p_approval_id: params.approval_id,
       p_status: params.status,
-      p_motivo_rejeicao: params.motivo_rejeicao || null
+      p_motivo_rejeicao: params.motivo_rejeicao
     })
 
     if (error) throw error
