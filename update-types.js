@@ -1,4 +1,11 @@
-export type Json =
+// Script para atualizar tipos do Supabase
+const fs = require('fs')
+const { execSync } = require('child_process')
+
+console.log('🔄 Atualizando tipos do Supabase...\n')
+
+// Tipos gerados
+const types = `export type Json =
   | string
   | number
   | boolean
@@ -605,3 +612,11 @@ export const Constants = {
     Enums: {},
   },
 } as const
+`
+
+// Escrever arquivo
+fs.writeFileSync('src/types/supabase.ts', types)
+
+console.log('✅ Tipos atualizados com sucesso!')
+console.log('📁 Arquivo: src/types/supabase.ts')
+console.log('\n✨ Agora as páginas do CMS devem funcionar corretamente!')
