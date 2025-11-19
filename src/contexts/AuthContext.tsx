@@ -33,19 +33,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!authUser) return null
     
     try {
-      // Timeout de 5 segundos para evitar travamento
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout ao buscar usuário')), 5000)
-      )
-
-      const fetchPromise = supabase
+      const { data, error } = await supabase
         .from('users')
         .select('*')
         .eq('email', authUser.email)
         .single()
-
-      // Race entre fetch e timeout
-      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any
 
       if (error) {
         console.error('Erro ao buscar dados do usuário:', error)
@@ -53,9 +45,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return {
           id: authUser.id,
           email: authUser.email,
-          name: authUser.user_metadata?.name || authUser.email,
-          role: 'cliente' as any, // Role padrão
-          is_active: true
+          name: authUser.user_metadata?.name || authUser.email?.split('@')[0] || 'Usuário',
+          role: authUser.user_metadata?.role || 'cliente' as any,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         }
       }
 
@@ -66,9 +60,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return {
         id: authUser.id,
         email: authUser.email,
-        name: authUser.user_metadata?.name || authUser.email,
-        role: 'cliente' as any,
-        is_active: true
+        name: authUser.user_metadata?.name || authUser.email?.split('@')[0] || 'Usuário',
+        role: authUser.user_metadata?.role || 'cliente' as any,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }
     }
   }

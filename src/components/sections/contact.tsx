@@ -4,8 +4,11 @@ import { useState } from "react"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSiteContent } from "@/hooks/useSiteContent"
 
 export function ContactSection() {
+  const { content } = useSiteContent('contact')
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,19 +50,19 @@ export function ContactSection() {
     {
       icon: Mail,
       title: "Email",
-      content: "contato@menezestech.com.br",
+      content: content.email || "contato@menezestech.com.br",
       link: "mailto:contato@menezestech.com.br"
     },
     {
       icon: Phone,
       title: "Telefone",
-      content: "(11) 99999-9999",
-      link: "tel:+5511999999999"
+      content: content.phone || "(11) 99999-9999",
+      link: `tel:${content.phone || '+5511999999999'}`
     },
     {
       icon: MapPin,
       title: "Localização",
-      content: "São Paulo, SP - Brasil",
+      content: content.address || "São Paulo, SP - Brasil",
       link: null
     }
   ]
