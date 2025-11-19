@@ -168,18 +168,16 @@ export default function FuncionarioDashboard() {
   if (loading) {
     return (
       <ProtectedRoute requiredRole="funcionario">
-        <DashboardLayout title={`Dashboard - ${user?.name}`}>
-          <div className="flex items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          </div>
+        <div className="flex items-center justify-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
       </ProtectedRoute>
     )
   }
 
   return (
     <ProtectedRoute requiredRole="funcionario">
-      <DashboardLayout title={`Dashboard - ${user?.name}`}>
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* Controle de Tempo */}
           <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50">
             <CardContent className="p-6">
