@@ -33,16 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!authUser) return null
     
     try {
-      // Primeiro, sincronizar o usuário
-      const { data: syncResult, error: syncError } = await supabase.rpc('sync_user_on_login' as any)
-      
-      if (syncError) {
-        console.error('Erro ao sincronizar usuário:', syncError)
-      } else {
-        console.log('Usuário sincronizado:', syncResult)
-      }
-      
-      // Buscar dados atualizados do usuário
+      // Buscar dados do usuário diretamente
       const { data, error } = await supabase
         .from('users')
         .select('*')

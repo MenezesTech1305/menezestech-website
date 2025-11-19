@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { FinancialCard } from "@/components/financeiro/financial-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -125,8 +124,7 @@ export default function FluxoCaixaPage() {
 
   return (
     <ProtectedRoute requiredRole={['superadmin', 'admin']}>
-      <DashboardLayout title="Fluxo de Caixa">
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* KPIs Principais */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FinancialCard
@@ -373,7 +371,6 @@ export default function FluxoCaixaPage() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

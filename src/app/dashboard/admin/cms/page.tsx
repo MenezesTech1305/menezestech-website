@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -89,14 +90,17 @@ export default function CMSPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
+      <ProtectedRoute requiredRole={['superadmin', 'admin']}>
+        <div className="flex items-center justify-center h-96">
+          <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
+        </div>
+      </ProtectedRoute>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <ProtectedRoute requiredRole={['superadmin', 'admin']}>
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Editor de Conteúdo</h1>
@@ -186,5 +190,6 @@ export default function CMSPage() {
         ))}
       </Tabs>
     </div>
+    </ProtectedRoute>
   )
 }

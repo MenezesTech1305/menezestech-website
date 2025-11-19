@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { StatsCard } from "@/components/ui/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -230,19 +229,16 @@ export default function OSManagement() {
   if (loading) {
     return (
       <ProtectedRoute requiredRole={['superadmin', 'admin', 'funcionario', 'cliente']}>
-        <DashboardLayout title="Gerenciamento de OS">
-          <div className="flex items-center justify-center p-8">
+        <div className="flex items-center justify-center p-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-        </DashboardLayout>
       </ProtectedRoute>
     )
   }
 
   return (
     <ProtectedRoute requiredRole={['superadmin', 'admin', 'funcionario', 'cliente']}>
-      <DashboardLayout title="Gerenciamento de OS">
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* Estatísticas */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <StatsCard
@@ -428,7 +424,6 @@ export default function OSManagement() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

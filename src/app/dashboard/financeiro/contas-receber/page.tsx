@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { InvoiceTable } from "@/components/financeiro/invoice-table"
 import { FinancialCard } from "@/components/financeiro/financial-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -227,8 +226,7 @@ export default function ContasReceberPage() {
 
   return (
     <ProtectedRoute requiredRole={['superadmin', 'admin']}>
-      <DashboardLayout title="Contas a Receber">
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FinancialCard
@@ -467,7 +465,6 @@ export default function ContasReceberPage() {
             </div>
           )}
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

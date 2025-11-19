@@ -1,10 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/AuthContext"
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { 
   MessageSquare, 
@@ -73,7 +71,6 @@ const mockIntegrations: Integration[] = [
 ]
 
 export default function ConfiguracoesPage() {
-  const { user } = useAuth()
   const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations)
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null)
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({})
@@ -160,8 +157,7 @@ export default function ConfiguracoesPage() {
 
   return (
     <ProtectedRoute requiredRole="superadmin">
-      <DashboardLayout title="Configurações Avançadas">
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* Header com informações */}
           <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
             <CardContent className="p-6">
@@ -435,7 +431,6 @@ export default function ConfiguracoesPage() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

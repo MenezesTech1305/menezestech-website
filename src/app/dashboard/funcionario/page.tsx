@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { StatsCard } from "@/components/ui/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -173,7 +172,6 @@ export default function FuncionarioDashboard() {
           <div className="flex items-center justify-center p-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-        </DashboardLayout>
       </ProtectedRoute>
     )
   }
@@ -384,7 +382,6 @@ export default function FuncionarioDashboard() {
             </Card>
           </div>
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

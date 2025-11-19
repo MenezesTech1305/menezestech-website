@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { StatsCard } from "@/components/ui/stats-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -154,19 +153,16 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <ProtectedRoute requiredRole={['superadmin', 'admin']}>
-        <DashboardLayout title="Dashboard Administrativo">
-          <div className="flex items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          </div>
-        </DashboardLayout>
+        <div className="flex items-center justify-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
       </ProtectedRoute>
     )
   }
 
   return (
     <ProtectedRoute requiredRole={['superadmin', 'admin']}>
-      <DashboardLayout title="Dashboard Administrativo">
-        <div className="space-y-6">
+      <div className="space-y-6">
           {/* Estatísticas principais */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatsCard
@@ -336,7 +332,6 @@ export default function AdminDashboard() {
             </Card>
           </div>
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 } 

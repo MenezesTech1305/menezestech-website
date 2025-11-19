@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { OSDetails } from "@/components/os/os-details"
 import { OSForm } from "@/components/os/os-form"
@@ -38,8 +37,7 @@ export default function OSDetailsPage() {
 
   return (
     <ProtectedRoute requiredRole={['superadmin', 'admin', 'funcionario', 'cliente']}>
-      <DashboardLayout title={isEditing ? "Editar OS" : "Detalhes da OS"}>
-        <div className="space-y-6">
+      <div className="space-y-6">
           {isEditing ? (
             <OSForm 
               osId={osId} 
@@ -61,7 +59,6 @@ export default function OSDetailsPage() {
             </>
           )}
         </div>
-      </DashboardLayout>
     </ProtectedRoute>
   )
 }
