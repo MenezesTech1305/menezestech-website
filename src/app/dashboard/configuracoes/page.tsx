@@ -75,6 +75,12 @@ export default function ConfiguracoesPage() {
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null)
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // Garantir que o componente está montado no cliente
+  useState(() => {
+    setMounted(true)
+  })
 
   const handleToggleIntegration = async (integrationId: string) => {
     setIsLoading(true)
@@ -156,7 +162,7 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <ProtectedRoute requiredRole="superadmin">
+    <ProtectedRoute requiredRole={['superadmin', 'admin']}>
       <div className="space-y-6">
           {/* Header com informações */}
           <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
