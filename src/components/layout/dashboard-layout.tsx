@@ -79,10 +79,6 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
     !item.roles || item.roles.includes(user?.role || '')
   )
 
-  // Debug: mostrar role do usuário e itens filtrados
-  console.log('User role:', user?.role)
-  console.log('Filtered navigation:', filteredNavigation.map(i => i.label))
-
   const isActive = (href: string) => {
     if (href === '/dashboard') {
       return pathname === href
