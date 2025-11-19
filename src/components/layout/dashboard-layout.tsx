@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { 
   Menu, 
   X, 
@@ -66,6 +68,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { user, signOut } = useAuth()
+  const pathname = usePathname()
 
   const handleLogout = async () => {
     await signOut()
@@ -75,6 +78,17 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const filteredNavigation = navigationItems.filter(item => 
     !item.roles || item.roles.includes(user?.role || '')
   )
+
+  // Debug: mostrar role do usuário e itens filtrados
+  console.log('User role:', user?.role)
+  console.log('Filtered navigation:', filteredNavigation.map(i => i.label))
+
+  const isActive = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === href
+    }
+    return pathname?.startsWith(href)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -93,15 +107,21 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
             <nav className="flex-1 px-2 space-y-1">
               {filteredNavigation.map((item) => {
                 const Icon = item.icon
+                const active = isActive(item.href)
                 return (
-                  <a
+                  <Link
                     key={item.label}
                     href={item.href}
-                    className="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    className={cn(
+                      "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
+                      active 
+                        ? "bg-blue-50 text-blue-600" 
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    )}
                   >
                     <Icon className="mr-3 h-5 w-5" />
                     {item.label}
-                  </a>
+                  </Link>
                 )
               })}
             </nav>
@@ -134,15 +154,22 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
               <nav className="mt-5 px-2 space-y-1">
                 {filteredNavigation.map((item) => {
                   const Icon = item.icon
+                  const active = isActive(item.href)
                   return (
-                    <a
+                    <Link
                       key={item.label}
                       href={item.href}
-                      className="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+                      onClick={() => setSidebarOpen(false)}
+                      className={cn(
+                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
+                        active 
+                          ? "bg-blue-50 text-blue-600" 
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      )}
                     >
                       <Icon className="mr-3 h-5 w-5" />
                       {item.label}
-                    </a>
+                    </Link>
                   )
                 })}
               </nav>
@@ -200,10 +227,10 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
                         {user?.role === 'funcionario' && 'Funcionário'}
                         {user?.role === 'cliente' && 'Cliente'}
                       </div>
-                      <a href="/dashboard/perfil" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <Link href="/dashboard/perfil" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <User className="mr-3 h-4 w-4" />
                         Meu Perfil
-                      </a>
+                      </Link>
                       <button
                         onClick={handleLogout}
                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
