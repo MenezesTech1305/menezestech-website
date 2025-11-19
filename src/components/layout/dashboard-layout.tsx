@@ -16,7 +16,8 @@ import {
   Bell,
   User,
   ChevronDown,
-  DollarSign
+  DollarSign,
+  Edit3
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar } from "@/components/ui/avatar"
@@ -55,6 +56,7 @@ const navigationItems: NavItem[] = [
   },
   { label: "Clientes", href: "/dashboard/clientes", icon: Users, roles: ['superadmin', 'admin', 'funcionario'] },
   { label: "Usuários", href: "/dashboard/admin/usuarios", icon: Shield, roles: ['superadmin', 'admin'] },
+  { label: "Editor de Conteúdo", href: "/dashboard/admin/cms", icon: Edit3, roles: ['superadmin', 'admin'] },
   { label: "Relatórios", href: "/dashboard/relatorios", icon: BarChart3, roles: ['superadmin', 'admin'] },
   { label: "Mensagens", href: "/dashboard/mensagens", icon: MessageSquare },
   { label: "Configurações", href: "/dashboard/configuracoes", icon: Settings, roles: ['superadmin'] },

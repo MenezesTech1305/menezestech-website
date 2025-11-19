@@ -28,40 +28,21 @@ export default function CMSPage() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Garantir que sempre recarrega ao montar
     setMounted(true)
-    setLoading(true)
     loadContent()
 
-    // Listener para recarregar quando a aba ficar visível
-    const handleTabVisible = () => {
-      console.log('CMS: Aba ficou visível, recarregando dados...')
-      loadContent()
-    }
-
-    // Listener para recarregar quando a janela receber foco
-    const handleWindowFocus = () => {
-      console.log('CMS: Janela recebeu foco, recarregando dados...')
-      loadContent()
-    }
-
-    window.addEventListener('tab-visible', handleTabVisible)
-    window.addEventListener('window-focus', handleWindowFocus)
-
-    // Cleanup ao desmontar
     return () => {
       setMounted(false)
-      setContent([])
-      window.removeEventListener('tab-visible', handleTabVisible)
-      window.removeEventListener('window-focus', handleWindowFocus)
     }
-  }, []) // Mantém vazio mas força reload com setLoading(true)
+  }, [])
 
   const loadContent = async () => {
+    if (!mounted) return
+    
     try {
       setLoading(true)
+      console.log('CMS: Carregando conteúdo...')
       
-      // Forçar bypass de cache do Supabase
       const { data, error } = await supabase
         .from('site_content')
         .select('*')
@@ -69,21 +50,25 @@ export default function CMSPage() {
 
       if (error) {
         console.error('Erro ao carregar conteúdo:', error)
-        throw error
+        toast.error(`Erro: ${error.message}`)
+        setContent([])
+        return
       }
       
-      // Sempre atualizar estado, mesmo que vazio
+      console.log('CMS: Conteúdo carregado:', data?.length || 0, 'itens')
       setContent(data || [])
       
       if (!data || data.length === 0) {
-        toast.info('Nenhum conteúdo encontrado')
+        toast.info('Nenhum conteúdo encontrado. Verifique se a tabela site_content foi criada.')
       }
     } catch (error: any) {
       console.error('Erro ao carregar conteúdo:', error)
-      toast.error(error.message || 'Erro ao carregar conteúdo do site')
-      setContent([]) // Limpar conteúdo em caso de erro
+      toast.error(error.message || 'Erro ao carregar conteúdo')
+      setContent([])
     } finally {
-      setLoading(false)
+      if (mounted) {
+        setLoading(false)
+      }
     }
   }
 
@@ -131,8 +116,46 @@ export default function CMSPage() {
   if (loading) {
     return (
       <ProtectedRoute requiredRole={['superadmin', 'admin']}>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex flex-col items-center justify-center h-96 space-y-4">
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
+          <p className="text-gray-600">Carregando conteúdo...</p>
+        </div>
+      </ProtectedRoute>
+    )
+  }
+
+  if (!loading && content.length === 0) {
+    return (
+      <ProtectedRoute requiredRole={['superadmin', 'admin']}>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Editor de Conteúdo</h1>
+              <p className="text-gray-600 mt-1">
+                Edite todo o conteúdo do site em tempo real
+              </p>
+            </div>
+            <Button onClick={loadContent} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Recarregar
+            </Button>
+          </div>
+
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <FileText className="h-16 w-16 text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nenhum conteúdo encontrado
+              </h3>
+              <p className="text-gray-600 text-center max-w-md mb-4">
+                A tabela site_content está vazia ou não foi criada. Execute o SQL de criação no Supabase.
+              </p>
+              <Button onClick={loadContent}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Tentar Novamente
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </ProtectedRoute>
     )
