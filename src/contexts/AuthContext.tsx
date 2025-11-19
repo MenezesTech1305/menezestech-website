@@ -33,22 +33,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!authUser) return null
     
     try {
-      // Buscar dados do usuário diretamente
-      const { data, error } = await supabase
+      // Timeout de 5 segundos para evitar travamento
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout ao buscar usuário')), 5000)
+      )
+
+      const fetchPromise = supabase
         .from('users')
         .select('*')
         .eq('email', authUser.email)
         .single()
 
+      // Race entre fetch e timeout
+      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any
+
       if (error) {
         console.error('Erro ao buscar dados do usuário:', error)
-        return null
+        // Se falhar, retornar dados básicos do auth
+        return {
+          id: authUser.id,
+          email: authUser.email,
+          name: authUser.user_metadata?.name || authUser.email,
+          role: 'cliente' as any, // Role padrão
+          is_active: true
+        }
       }
 
       return data
     } catch (err) {
       console.error('Erro ao buscar dados do usuário:', err)
-      return null
+      // Se falhar, retornar dados básicos do auth
+      return {
+        id: authUser.id,
+        email: authUser.email,
+        name: authUser.user_metadata?.name || authUser.email,
+        role: 'cliente' as any,
+        is_active: true
+      }
     }
   }
 
@@ -93,29 +114,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       console.log('Auth state changed:', event, session?.user?.email)
 
-      setSession(session)
-      setLoading(true)
+      try {
+        setSession(session)
+        setLoading(true)
 
-      if (session?.user) {
-        const userData = await fetchUserData(session.user)
-        setUser(userData)
-      } else {
-        setUser(null)
+        if (session?.user) {
+          const userData = await fetchUserData(session.user)
+          setUser(userData)
+        } else {
+          setUser(null)
+        }
+
+        // Atualizar último login
+        if (event === 'SIGNED_IN' && session?.user?.email) {
+          try {
+            await supabase
+              .from('users')
+              .update({ last_login: new Date().toISOString() })
+              .eq('email', session.user.email)
+          } catch (err) {
+            console.error('Erro ao atualizar último login:', err)
+          }
+        }
+      } catch (err) {
+        console.error('Erro no onAuthStateChange:', err)
+      } finally {
+        setLoading(false)
       }
-
-      setLoading(false)
-
-             // Atualizar último login
-       if (event === 'SIGNED_IN' && session?.user?.email) {
-         try {
-           await supabase
-             .from('users')
-             .update({ last_login: new Date().toISOString() })
-             .eq('email', session.user.email)
-         } catch (err) {
-           console.error('Erro ao atualizar último login:', err)
-         }
-       }
     })
 
     return () => {

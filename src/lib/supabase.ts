@@ -8,7 +8,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Variáveis de ambiente do Supabase não configuradas. Verifique .env.local')
 }
 
-// Cliente Supabase tipado
+// Cliente Supabase tipado com configuração otimizada
 export const supabase: SupabaseClient<Database> = createClient<Database>(
   supabaseUrl,
   supabaseAnonKey,
@@ -16,7 +16,10 @@ export const supabase: SupabaseClient<Database> = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true
+      detectSessionInUrl: true,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+      storageKey: 'menezestech-auth',
+      flowType: 'pkce', // Mais seguro
     },
     realtime: {
       params: {
@@ -25,11 +28,68 @@ export const supabase: SupabaseClient<Database> = createClient<Database>(
     },
     global: {
       headers: {
-        'X-Client-Info': 'menezestech-system'
+        'X-Client-Info': 'menezestech-system',
+        'Cache-Control': 'no-cache',
       }
+    },
+    db: {
+      schema: 'public'
     }
   }
 )
+
+// Função para limpar cache do Supabase
+export const clearSupabaseCache = () => {
+  if (typeof window !== 'undefined') {
+    // Limpar storage do Supabase
+    const keys = Object.keys(localStorage)
+    keys.forEach(key => {
+      if (key.startsWith('sb-') || key.includes('supabase') || key === 'menezestech-auth') {
+        localStorage.removeItem(key)
+      }
+    })
+  }
+}
+
+// Função para verificar e renovar sessão
+export const ensureValidSession = async () => {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    if (error) {
+      console.error('Erro ao verificar sessão:', error)
+      return false
+    }
+    
+    if (!session) {
+      return false
+    }
+    
+    // Verificar se a sessão está próxima de expirar (menos de 5 minutos)
+    const expiresAt = session.expires_at
+    if (expiresAt) {
+      const now = Math.floor(Date.now() / 1000)
+      const timeUntilExpiry = expiresAt - now
+      
+      if (timeUntilExpiry < 300) { // Menos de 5 minutos
+        console.log('Sessão próxima de expirar, renovando...')
+        const { data, error: refreshError } = await supabase.auth.refreshSession()
+        
+        if (refreshError) {
+          console.error('Erro ao renovar sessão:', refreshError)
+          return false
+        }
+        
+        return !!data.session
+      }
+    }
+    
+    return true
+  } catch (error) {
+    console.error('Erro ao verificar sessão:', error)
+    return false
+  }
+}
 
 // Cliente para uso no servidor (Server Components)
 export const createServerClient = () => {

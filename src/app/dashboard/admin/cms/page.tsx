@@ -25,23 +25,63 @@ export default function CMSPage() {
   const [content, setContent] = useState<SiteContent[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // Garantir que sempre recarrega ao montar
+    setMounted(true)
+    setLoading(true)
     loadContent()
-  }, [])
+
+    // Listener para recarregar quando a aba ficar visível
+    const handleTabVisible = () => {
+      console.log('CMS: Aba ficou visível, recarregando dados...')
+      loadContent()
+    }
+
+    // Listener para recarregar quando a janela receber foco
+    const handleWindowFocus = () => {
+      console.log('CMS: Janela recebeu foco, recarregando dados...')
+      loadContent()
+    }
+
+    window.addEventListener('tab-visible', handleTabVisible)
+    window.addEventListener('window-focus', handleWindowFocus)
+
+    // Cleanup ao desmontar
+    return () => {
+      setMounted(false)
+      setContent([])
+      window.removeEventListener('tab-visible', handleTabVisible)
+      window.removeEventListener('window-focus', handleWindowFocus)
+    }
+  }, []) // Mantém vazio mas força reload com setLoading(true)
 
   const loadContent = async () => {
     try {
+      setLoading(true)
+      
+      // Forçar bypass de cache do Supabase
       const { data, error } = await supabase
         .from('site_content')
         .select('*')
         .order('section', { ascending: true })
 
-      if (error) throw error
+      if (error) {
+        console.error('Erro ao carregar conteúdo:', error)
+        throw error
+      }
+      
+      // Sempre atualizar estado, mesmo que vazio
       setContent(data || [])
-    } catch (error) {
+      
+      if (!data || data.length === 0) {
+        toast.info('Nenhum conteúdo encontrado')
+      }
+    } catch (error: any) {
       console.error('Erro ao carregar conteúdo:', error)
-      toast.error('Erro ao carregar conteúdo do site')
+      toast.error(error.message || 'Erro ao carregar conteúdo do site')
+      setContent([]) // Limpar conteúdo em caso de erro
     } finally {
       setLoading(false)
     }

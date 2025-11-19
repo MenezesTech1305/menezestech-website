@@ -34,67 +34,15 @@ export function ProtectedRoute({
     requiredPermission?.action || 'read',
     requiredPermission?.module
   )
-  const [loadingTimeout, setLoadingTimeout] = React.useState(false)
-
-  // Timeout de segurança para loading infinito
-  React.useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => {
-        setLoadingTimeout(true)
-      }, 10000) // 10 segundos
-
-      return () => clearTimeout(timer)
-    }
-  }, [loading])
 
   // Mostrar loading
-  if (loading && !loadingTimeout) {
+  if (loading) {
     return loadingComponent || (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="text-gray-600">Carregando...</p>
         </div>
-      </div>
-    )
-  }
-
-  // Se deu timeout, mostrar erro
-  if (loadingTimeout) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <Card className="w-full max-w-md mx-4">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto">
-                <ShieldIcon className="w-8 h-8 text-yellow-600" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Erro ao Carregar
-                </h2>
-                <p className="text-gray-600 mt-2">
-                  Houve um problema ao verificar suas permissões.
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => window.location.reload()}
-                  className="flex-1"
-                >
-                  Recarregar
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => window.location.href = '/portal'}
-                  className="flex-1"
-                >
-                  Voltar ao Login
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     )
   }
