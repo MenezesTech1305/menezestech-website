@@ -17,8 +17,11 @@ interface SiteContent {
   section: string
   key: string
   value: string
-  type: string
-  description: string
+  type: string | null
+  description: string | null
+  created_at?: string | null
+  updated_at?: string | null
+  updated_by?: string | null
 }
 
 export default function CMSPage() {
@@ -95,7 +98,7 @@ export default function CMSPage() {
     }
   }
 
-  const getIcon = (type: string) => {
+  const getIcon = (type: string | null) => {
     switch (type) {
       case 'image': return <Image className="h-4 w-4" />
       case 'phone': return <Phone className="h-4 w-4" />
@@ -214,26 +217,30 @@ export default function CMSPage() {
 
                     {item.type === 'html' ? (
                       <Textarea
-                        value={item.value}
-                        onChange={(e) => {
-                          const newContent = content.map(c =>
-                            c.id === item.id ? { ...c, value: e.target.value } : c
-                          )
-                          setContent(newContent)
-                        }}
-                        rows={4}
-                        className="font-mono text-sm"
+                        {...{
+                          value: item.value,
+                          onChange: (e: any) => {
+                            const newContent = content.map(c =>
+                              c.id === item.id ? { ...c, value: e.target.value } : c
+                            )
+                            setContent(newContent)
+                          },
+                          rows: 4,
+                          className: "font-mono text-sm"
+                        } as any}
                       />
                     ) : (
                       <Input
-                        type={item.type === 'email' ? 'email' : item.type === 'url' ? 'url' : 'text'}
-                        value={item.value}
-                        onChange={(e) => {
-                          const newContent = content.map(c =>
-                            c.id === item.id ? { ...c, value: e.target.value } : c
-                          )
-                          setContent(newContent)
-                        }}
+                        {...{
+                          type: item.type === 'email' ? 'email' : item.type === 'url' ? 'url' : 'text',
+                          value: item.value,
+                          onChange: (e: any) => {
+                            const newContent = content.map(c =>
+                              c.id === item.id ? { ...c, value: e.target.value } : c
+                            )
+                            setContent(newContent)
+                          }
+                        } as any}
                       />
                     )}
 
